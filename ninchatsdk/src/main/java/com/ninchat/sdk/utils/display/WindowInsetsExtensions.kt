@@ -14,10 +14,11 @@ fun View.applySystemBarPadding(
     applyTop: Boolean = false,
     applyRight: Boolean = false,
     applyBottom: Boolean = false,
+    types: Int = WindowInsetsCompat.Type.systemBars(),
 ) {
     val initial = InitialPadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
     ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
-        val systemBars = insets.systemBarInsetsCompat()
+        val systemBars = insets.getInsets(types)
         view.updatePadding(
             left = if (applyLeft) initial.left + systemBars.left else initial.left,
             top = if (applyTop) initial.top + systemBars.top else initial.top,
@@ -34,6 +35,7 @@ fun View.applySystemBarMargins(
     applyTop: Boolean = false,
     applyRight: Boolean = false,
     applyBottom: Boolean = false,
+    types: Int = WindowInsetsCompat.Type.systemBars(),
 ) {
     val layoutParams = layoutParams as? ViewGroup.MarginLayoutParams ?: return
     val initial = InitialMargin(
@@ -45,7 +47,7 @@ fun View.applySystemBarMargins(
     ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
         val marginParams = view.layoutParams as? ViewGroup.MarginLayoutParams
             ?: return@setOnApplyWindowInsetsListener insets
-        val systemBars = insets.systemBarInsetsCompat()
+        val systemBars = insets.getInsets(types)
         marginParams.leftMargin =
             if (applyLeft) initial.left + systemBars.left else initial.left
         marginParams.topMargin =
@@ -58,22 +60,6 @@ fun View.applySystemBarMargins(
         insets
     }
     requestApplyInsetsWhenAttached()
-}
-
-private data class SystemBarInsets(
-    val left: Int,
-    val top: Int,
-    val right: Int,
-    val bottom: Int,
-)
-
-private fun WindowInsetsCompat.systemBarInsetsCompat(): SystemBarInsets {
-    return SystemBarInsets(
-        left = systemWindowInsetLeft,
-        top = systemWindowInsetTop,
-        right = systemWindowInsetRight,
-        bottom = systemWindowInsetBottom,
-    )
 }
 
 private fun View.requestApplyInsetsWhenAttached() {

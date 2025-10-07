@@ -6,6 +6,7 @@ import android.os.Handler
 import android.view.View
 import com.ninchat.sdk.NinchatSessionManager
 import com.ninchat.sdk.R
+import com.ninchat.sdk.activities.EdgeToEdgeInset
 import com.ninchat.sdk.activities.NinchatBaseActivity
 import com.ninchat.sdk.ninchatactivity.model.NinchatActivityModel
 import com.ninchat.sdk.ninchatactivity.presenter.INinchatActivityPresenter
@@ -14,7 +15,6 @@ import com.ninchat.sdk.ninchatquestionnaire.ninchatquestionnaireactivity.model.N
 import com.ninchat.sdk.ninchatquestionnaire.ninchatquestionnaireactivity.presenter.NinchatQuestionnairePresenter
 import com.ninchat.sdk.ninchatqueue.model.NinchatQueueModel
 import com.ninchat.sdk.utils.misc.Misc
-import com.ninchat.sdk.utils.display.applySystemBarPadding
 import kotlinx.android.synthetic.main.activity_ninchat.*
 
 class NinchatActivity : NinchatBaseActivity(), INinchatActivityPresenter {
@@ -26,9 +26,15 @@ class NinchatActivity : NinchatBaseActivity(), INinchatActivityPresenter {
     override val layoutRes: Int
         get() = R.layout.activity_ninchat
 
+    override val edgeToEdgeInsets: List<EdgeToEdgeInset> = listOf(
+        EdgeToEdgeInset(
+            viewId = R.id.ninchat_acvitity_top_matter,
+            paddingTop = true,
+        ),
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ninchat_acvitity_top_matter.applySystemBarPadding(applyTop = true)
         // If the app is killed in the background sessionManager is not initialized the SDK must
         // be exited and the NinchatSession needs to be initialized again
         if (!ninchatActivityPresenter.hasSession()) {

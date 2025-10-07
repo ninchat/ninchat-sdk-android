@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ninchat.sdk.NinchatSessionManager
 import com.ninchat.sdk.R
+import com.ninchat.sdk.activities.EdgeToEdgeInset
 import com.ninchat.sdk.activities.NinchatBaseActivity
 import com.ninchat.sdk.events.OnItemFocus
 import com.ninchat.sdk.events.OnNextQuestionnaire
@@ -19,7 +20,6 @@ import com.ninchat.sdk.ninchatquestionnaire.ninchatquestionnaireactivity.present
 import com.ninchat.sdk.ninchatquestionnaire.ninchatquestionnaireactivity.presenter.NinchatQuestionnairePresenter
 import com.ninchat.sdk.ninchatquestionnaire.ninchatquestionnairelist.view.NinchatQuestionnaireListAdapter
 import com.ninchat.sdk.utils.keyboard.hideKeyBoardForce
-import com.ninchat.sdk.utils.display.applySystemBarPadding
 import com.ninchat.sdk.utils.misc.Misc
 import kotlinx.android.synthetic.main.activity_ninchat_questionnaire.*
 import kotlinx.android.synthetic.main.activity_ninchat_questionnaire.view.*
@@ -38,10 +38,16 @@ class NinchatQuestionnaireActivity : NinchatBaseActivity(), INinchatQuestionnair
     override val layoutRes: Int
         get() = R.layout.activity_ninchat_questionnaire
 
+    override val edgeToEdgeInsets: List<EdgeToEdgeInset> = listOf(
+        EdgeToEdgeInset(
+            viewId = R.id.ninchat_titlebar,
+            paddingTop = true,
+        ),
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         EventBus.getDefault().register(this)
         super.onCreate(savedInstanceState)
-        ninchat_audience_questionnaire_root.ninchat_titlebar.applySystemBarPadding(applyTop = true)
         val drawableBackground = NinchatSessionManager.getInstance()?.ninchatChatBackground?.let {
             Misc.getNinchatChatBackground(applicationContext, it)
         } ?: ContextCompat.getDrawable(applicationContext, R.drawable.ninchat_chat_background_tiled)

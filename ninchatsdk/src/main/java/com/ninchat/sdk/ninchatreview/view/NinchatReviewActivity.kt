@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.View
 import com.ninchat.sdk.NinchatSession
 import com.ninchat.sdk.R
+import com.ninchat.sdk.activities.EdgeToEdgeInset
 import com.ninchat.sdk.activities.NinchatBaseActivity
 import com.ninchat.sdk.ninchatreview.model.NinchatReviewModel
 import com.ninchat.sdk.ninchatreview.presenter.NinchatReviewPresenter
-import com.ninchat.sdk.utils.display.applySystemBarPadding
 import kotlinx.android.synthetic.main.activity_ninchat_review.*
 import kotlinx.android.synthetic.main.activity_ninchat_review.view.*
 
@@ -17,13 +17,19 @@ class NinchatReviewActivity : NinchatBaseActivity() {
     override val layoutRes: Int
         get() = R.layout.activity_ninchat_review
 
+    override val edgeToEdgeInsets: List<EdgeToEdgeInset> = listOf(
+        EdgeToEdgeInset(
+            viewId = R.id.ninchat_titlebar,
+            paddingTop = true,
+        ),
+    )
+
     // ninchat review presenter
     private val ninchatReviewPresenter = NinchatReviewPresenter(NinchatReviewModel())
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ninchat_review_activity.ninchat_titlebar.applySystemBarPadding(applyTop = true)
 
         if (ninchatReviewPresenter.isConversationView()) {
             ninchatReviewPresenter.renderBotView(

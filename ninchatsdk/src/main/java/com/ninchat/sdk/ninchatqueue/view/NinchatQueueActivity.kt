@@ -4,13 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.ninchat.sdk.R
+import com.ninchat.sdk.activities.EdgeToEdgeInset
 import com.ninchat.sdk.activities.NinchatBaseActivity
 import com.ninchat.sdk.ninchatchatactivity.presenter.NinchatChatPresenter
 import com.ninchat.sdk.ninchatqueue.model.NinchatQueueModel
 import com.ninchat.sdk.ninchatqueue.presenter.INinchatQueuePresenter
 import com.ninchat.sdk.ninchatqueue.presenter.NinchatQueuePresenter
 import com.ninchat.sdk.utils.misc.Parameter
-import com.ninchat.sdk.utils.display.applySystemBarPadding
 import kotlinx.android.synthetic.main.activity_ninchat_queue.*
 import kotlinx.android.synthetic.main.activity_ninchat_queue.view.*
 
@@ -19,6 +19,17 @@ class NinchatQueueActivity : NinchatBaseActivity(), INinchatQueuePresenter {
 
     override val layoutRes: Int
         get() = R.layout.activity_ninchat_queue
+
+    override val edgeToEdgeInsets: List<EdgeToEdgeInset> = listOf(
+        EdgeToEdgeInset(
+            viewId = R.id.ninchat_queue_activity_top_matter,
+            paddingTop = true,
+        ),
+        EdgeToEdgeInset(
+            viewId = R.id.ninchat_titlebar,
+            paddingTop = true,
+        ),
+    )
 
     // ninchat queue presenter
     private val ninchatQueuePresenter = NinchatQueuePresenter(
@@ -29,8 +40,6 @@ class NinchatQueueActivity : NinchatBaseActivity(), INinchatQueuePresenter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ninchat_queue_activity_top_matter.applySystemBarPadding(applyTop = true)
-        ninchat_queue_activity.ninchat_titlebar.applySystemBarPadding(applyTop = true)
         // If the app is killed in the background sessionManager is not initialized the SDK must
         // be exited and the NinchatSession needs to be initialized again
         if (!ninchatQueuePresenter.hasSession()) {

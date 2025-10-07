@@ -9,6 +9,7 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import com.ninchat.sdk.R
+import com.ninchat.sdk.activities.EdgeToEdgeInset
 import com.ninchat.sdk.activities.NinchatBaseActivity
 import com.ninchat.sdk.helper.glidewrapper.GlideWrapper
 import com.ninchat.sdk.ninchatmedia.model.NinchatMediaModel
@@ -17,12 +18,22 @@ import com.ninchat.sdk.ninchatmedia.presenter.INinchatMediaPresenter
 import com.ninchat.sdk.ninchatmedia.presenter.NinchatMediaPresenter
 import com.ninchat.sdk.utils.permission.NinchatPermission.Companion.hasFileAccessPermissions
 import com.ninchat.sdk.utils.permission.NinchatPermission.Companion.requestFileAccessPermissions
-import com.ninchat.sdk.utils.display.applySystemBarPadding
 import kotlinx.android.synthetic.main.activity_ninchat_media.*
 
 class NinchatMediaActivity : NinchatBaseActivity(), INinchatMediaPresenter {
     override val layoutRes: Int
         get() = R.layout.activity_ninchat_media
+
+    override val edgeToEdgeInsets: List<EdgeToEdgeInset> = listOf(
+        EdgeToEdgeInset(
+            viewId = R.id.ninchat_media_top,
+            paddingTop = true,
+        ),
+        EdgeToEdgeInset(
+            viewId = R.id.ninchat_media_error,
+            paddingTop = true,
+        ),
+    )
 
     override fun allowBackButton(): Boolean {
         return true
@@ -66,8 +77,6 @@ class NinchatMediaActivity : NinchatBaseActivity(), INinchatMediaPresenter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ninchat_media_top.applySystemBarPadding(applyTop = true)
-        ninchat_media_error.applySystemBarPadding(applyTop = true)
         ninchatMediaPresenter.updateFileId(intent = intent)
         ninchatMediaPresenter.ninchatMediaModel.getFile()?.let { ninchatFile ->
             if (ninchatFile.isVideo) {
