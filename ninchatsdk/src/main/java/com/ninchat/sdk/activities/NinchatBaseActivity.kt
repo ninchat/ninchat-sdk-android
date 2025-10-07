@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.content.res.Configuration
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.IdRes
@@ -74,6 +75,7 @@ abstract class NinchatBaseActivity : AppCompatActivity() {
     }
 
     private fun applyEdgeToEdgeInsets() {
+        val isPortrait = resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE
         val requiredInsets = mutableListOf(
             EdgeToEdgeInset(
                 viewId = AndroidR.id.content,
@@ -87,17 +89,17 @@ abstract class NinchatBaseActivity : AppCompatActivity() {
             if (inset.paddingLeft || inset.paddingTop || inset.paddingRight || inset.paddingBottom) {
                 targetView.applySystemBarPadding(
                     applyLeft = inset.paddingLeft,
-                    applyTop = inset.paddingTop,
+                    applyTop = inset.paddingTop && isPortrait,
                     applyRight = inset.paddingRight,
-                    applyBottom = inset.paddingBottom,
+                    applyBottom = inset.paddingBottom && isPortrait,
                 )
             }
             if (inset.marginLeft || inset.marginTop || inset.marginRight || inset.marginBottom) {
                 targetView.applySystemBarMargins(
                     applyLeft = inset.marginLeft,
-                    applyTop = inset.marginTop,
+                    applyTop = inset.marginTop && isPortrait,
                     applyRight = inset.marginRight,
-                    applyBottom = inset.marginBottom,
+                    applyBottom = inset.marginBottom && isPortrait,
                 )
             }
         }
