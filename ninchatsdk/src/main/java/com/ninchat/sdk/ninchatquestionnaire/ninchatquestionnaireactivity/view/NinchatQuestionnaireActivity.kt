@@ -19,6 +19,7 @@ import com.ninchat.sdk.ninchatquestionnaire.ninchatquestionnaireactivity.present
 import com.ninchat.sdk.ninchatquestionnaire.ninchatquestionnaireactivity.presenter.NinchatQuestionnairePresenter
 import com.ninchat.sdk.ninchatquestionnaire.ninchatquestionnairelist.view.NinchatQuestionnaireListAdapter
 import com.ninchat.sdk.utils.keyboard.hideKeyBoardForce
+import com.ninchat.sdk.utils.display.applySystemBarPadding
 import com.ninchat.sdk.utils.misc.Misc
 import kotlinx.android.synthetic.main.activity_ninchat_questionnaire.*
 import kotlinx.android.synthetic.main.activity_ninchat_questionnaire.view.*
@@ -40,6 +41,7 @@ class NinchatQuestionnaireActivity : NinchatBaseActivity(), INinchatQuestionnair
     override fun onCreate(savedInstanceState: Bundle?) {
         EventBus.getDefault().register(this)
         super.onCreate(savedInstanceState)
+        ninchat_audience_questionnaire_root.ninchat_titlebar.applySystemBarPadding(applyTop = true)
         val drawableBackground = NinchatSessionManager.getInstance()?.ninchatChatBackground?.let {
             Misc.getNinchatChatBackground(applicationContext, it)
         } ?: ContextCompat.getDrawable(applicationContext, R.drawable.ninchat_chat_background_tiled)

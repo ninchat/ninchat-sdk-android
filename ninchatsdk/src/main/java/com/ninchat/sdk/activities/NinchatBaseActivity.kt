@@ -9,15 +9,14 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.core.view.WindowCompat
 import com.ninchat.sdk.R
-import com.ninchat.sdk.utils.display.getStatusBarHeight
 import com.ninchat.sdk.utils.misc.Broadcast
 
 abstract class NinchatBaseActivity : AppCompatActivity() {
@@ -30,6 +29,7 @@ abstract class NinchatBaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(layoutRes)
         LocalBroadcastManager.getInstance(applicationContext).run {
             registerReceiver(closeActivityReceiver, IntentFilter(Broadcast.CLOSE_NINCHAT_ACTIVITY))

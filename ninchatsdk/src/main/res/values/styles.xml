@@ -11,6 +11,12 @@
         <item name="android:autoLink">all</item>
         <item name="android:textColorLink">@color/ninchat_color_link</item>
         <item name="android:buttonStyle">@style/NinchatTheme.Button</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
 
     <style name="NinchatTheme.Button" parent="android:Widget.Material.Light.Button">

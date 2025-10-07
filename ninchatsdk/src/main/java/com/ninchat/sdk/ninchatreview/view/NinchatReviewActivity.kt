@@ -8,6 +8,7 @@ import com.ninchat.sdk.R
 import com.ninchat.sdk.activities.NinchatBaseActivity
 import com.ninchat.sdk.ninchatreview.model.NinchatReviewModel
 import com.ninchat.sdk.ninchatreview.presenter.NinchatReviewPresenter
+import com.ninchat.sdk.utils.display.applySystemBarPadding
 import kotlinx.android.synthetic.main.activity_ninchat_review.*
 import kotlinx.android.synthetic.main.activity_ninchat_review.view.*
 
@@ -22,6 +23,7 @@ class NinchatReviewActivity : NinchatBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ninchat_review_activity.ninchat_titlebar.applySystemBarPadding(applyTop = true)
 
         if (ninchatReviewPresenter.isConversationView()) {
             ninchatReviewPresenter.renderBotView(

@@ -34,8 +34,8 @@ android {
         versionName calculateVersionName()
         versionCode 1
 
-       buildConfigField 'String', 'VERSION_NAME', "\"${versionName}\""
-       buildConfigField 'int', 'VERSION_CODE', "1"
+       // buildConfigField 'String', 'VERSION_NAME', "\"${versionName}\""
+       // buildConfigField 'int', 'VERSION_CODE', "1"
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -43,6 +43,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 
     buildTypes {

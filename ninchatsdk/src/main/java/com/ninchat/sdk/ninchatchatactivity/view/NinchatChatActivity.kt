@@ -25,6 +25,8 @@ import com.ninchat.sdk.ninchattitlebar.view.NinchatTitlebarView.Companion.showTi
 import com.ninchat.sdk.ninchatvideointegrations.jitsi.NinchatGroupCallIntegration
 import com.ninchat.sdk.ninchatvideointegrations.p2p.NinchatP2PIntegration
 import com.ninchat.sdk.utils.keyboard.hideKeyBoardForce
+import com.ninchat.sdk.utils.display.applySystemBarMargins
+import com.ninchat.sdk.utils.display.applySystemBarPadding
 import com.ninchat.sdk.utils.misc.Broadcast
 import com.ninchat.sdk.utils.misc.Misc.Companion.getNinchatChatBackground
 import com.ninchat.sdk.utils.misc.NinchatAdapterCallback
@@ -292,6 +294,9 @@ class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ninchat_titlebar.applySystemBarPadding(applyTop = true)
+        ninchat_chat_close.applySystemBarMargins(applyTop = true, applyRight = true)
+        content_view.applySystemBarPadding(applyBottom = true)
         EventBus.getDefault().register(this)
         // If the app is killed in the background sessionManager is not initialized the SDK must
         // be exited and the NinchatSession needs to be initialzed again

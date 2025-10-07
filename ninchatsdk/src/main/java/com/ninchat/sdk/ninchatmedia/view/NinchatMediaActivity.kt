@@ -17,6 +17,7 @@ import com.ninchat.sdk.ninchatmedia.presenter.INinchatMediaPresenter
 import com.ninchat.sdk.ninchatmedia.presenter.NinchatMediaPresenter
 import com.ninchat.sdk.utils.permission.NinchatPermission.Companion.hasFileAccessPermissions
 import com.ninchat.sdk.utils.permission.NinchatPermission.Companion.requestFileAccessPermissions
+import com.ninchat.sdk.utils.display.applySystemBarPadding
 import kotlinx.android.synthetic.main.activity_ninchat_media.*
 
 class NinchatMediaActivity : NinchatBaseActivity(), INinchatMediaPresenter {
@@ -65,6 +66,8 @@ class NinchatMediaActivity : NinchatBaseActivity(), INinchatMediaPresenter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ninchat_media_top.applySystemBarPadding(applyTop = true)
+        ninchat_media_error.applySystemBarPadding(applyTop = true)
         ninchatMediaPresenter.updateFileId(intent = intent)
         ninchatMediaPresenter.ninchatMediaModel.getFile()?.let { ninchatFile ->
             if (ninchatFile.isVideo) {

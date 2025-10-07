@@ -10,7 +10,9 @@ import com.ninchat.sdk.ninchatqueue.model.NinchatQueueModel
 import com.ninchat.sdk.ninchatqueue.presenter.INinchatQueuePresenter
 import com.ninchat.sdk.ninchatqueue.presenter.NinchatQueuePresenter
 import com.ninchat.sdk.utils.misc.Parameter
+import com.ninchat.sdk.utils.display.applySystemBarPadding
 import kotlinx.android.synthetic.main.activity_ninchat_queue.*
+import kotlinx.android.synthetic.main.activity_ninchat_queue.view.*
 
 class NinchatQueueActivity : NinchatBaseActivity(), INinchatQueuePresenter {
     var queueId: String? = null
@@ -27,6 +29,8 @@ class NinchatQueueActivity : NinchatBaseActivity(), INinchatQueuePresenter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ninchat_queue_activity_top_matter.applySystemBarPadding(applyTop = true)
+        ninchat_queue_activity.ninchat_titlebar.applySystemBarPadding(applyTop = true)
         // If the app is killed in the background sessionManager is not initialized the SDK must
         // be exited and the NinchatSession needs to be initialized again
         if (!ninchatQueuePresenter.hasSession()) {
