@@ -465,7 +465,6 @@ class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
         EdgeToEdgeInset(
             viewId = R.id.ninchat_chat_close,
             marginTop = true,
-            marginRight = true,
         ),
         EdgeToEdgeInset(
             viewId = R.id.content_view,

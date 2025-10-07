@@ -1,5 +1,6 @@
 package com.ninchat.sdk.activities
 
+import android.R as AndroidR
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -73,7 +74,15 @@ abstract class NinchatBaseActivity : AppCompatActivity() {
     }
 
     private fun applyEdgeToEdgeInsets() {
-        edgeToEdgeInsets.forEach { inset ->
+        val requiredInsets = mutableListOf(
+            EdgeToEdgeInset(
+                viewId = AndroidR.id.content,
+                paddingLeft = true,
+                paddingRight = true,
+            ),
+        )
+        requiredInsets += edgeToEdgeInsets
+        requiredInsets.forEach { inset ->
             val targetView = findViewById<View>(inset.viewId) ?: return@forEach
             if (inset.paddingLeft || inset.paddingTop || inset.paddingRight || inset.paddingBottom) {
                 targetView.applySystemBarPadding(
