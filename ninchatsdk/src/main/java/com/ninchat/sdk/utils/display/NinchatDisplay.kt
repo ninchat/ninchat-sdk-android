@@ -6,8 +6,7 @@ import android.os.Build
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowInsets
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import kotlin.math.max
 
 
 fun Activity.getScreenHeight(): Int {
@@ -60,14 +59,26 @@ fun View.applySystemBarInsets(
     applyBottom: Boolean = true
 ) {
     val startP = intArrayOf(paddingLeft, paddingTop, paddingRight, paddingBottom)
-    ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
-        val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-        val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+    setOnApplyWindowInsetsListener { v, insets ->
+        val (leftInset, topInset, rightInset, bottomInset) =
+            if (Build.VERSION.SDK_INT >= 30) {
+                val systemBars = insets.getInsets(WindowInsets.Type.systemBars())
+                val ime = insets.getInsets(WindowInsets.Type.ime())
+                intArrayOf(systemBars.left, systemBars.top, systemBars.right, max(systemBars.bottom, ime.bottom))
+            } else {
+                @Suppress("DEPRECATION")
+                intArrayOf(
+                    insets.systemWindowInsetLeft,
+                    insets.systemWindowInsetTop,
+                    insets.systemWindowInsetRight,
+                    insets.systemWindowInsetBottom
+                )
+            }
 
-        val effectiveLeft = if (applyLeft) systemBars.left else 0
-        val effectiveTop = if (applyTop) systemBars.top else 0
-        val effectiveRight = if (applyRight) systemBars.right else 0
-        val effectiveBottom = if (applyBottom) maxOf(systemBars.bottom, ime.bottom) else 0
+        val effectiveLeft = if (applyLeft) leftInset else 0
+        val effectiveTop = if (applyTop) topInset else 0
+        val effectiveRight = if (applyRight) rightInset else 0
+        val effectiveBottom = if (applyBottom) bottomInset else 0
 
         v.setPadding(
             startP[0] + effectiveLeft,
@@ -76,7 +87,8 @@ fun View.applySystemBarInsets(
             startP[3] + effectiveBottom
         )
 
+        @Suppress("DEPRECATION")
         insets
     }
-    ViewCompat.requestApplyInsets(this)
+    requestApplyInsets()
 }
