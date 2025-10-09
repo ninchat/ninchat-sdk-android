@@ -48,8 +48,11 @@ abstract class NinchatBaseActivity : AppCompatActivity() {
         }
 
         setContentView(layoutRes)
-        (findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0))?.applySystemBarInsets()
-        
+        (findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0))?.applySystemBarInsets(
+            applyLeft = true,
+            applyRight = true
+        )
+
         LocalBroadcastManager.getInstance(applicationContext).run {
             registerReceiver(closeActivityReceiver, IntentFilter(Broadcast.CLOSE_NINCHAT_ACTIVITY))
         }

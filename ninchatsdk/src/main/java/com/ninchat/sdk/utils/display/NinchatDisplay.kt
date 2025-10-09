@@ -61,26 +61,33 @@ fun View.applySystemBarInsets(
 ) {
     val startP = intArrayOf(paddingLeft, paddingTop, paddingRight, paddingBottom)
     setOnApplyWindowInsetsListener { v, insets ->
-        if (Build.VERSION.SDK_INT >= 30) {
+        val (leftInset, topInset, rightInset, bottomInset) = if (Build.VERSION.SDK_INT >= 30) {
             val bars = insets.getInsets(WindowInsets.Type.systemBars())
-            v.setPadding(
-                startP[0] + if (applyLeft) bars.left else 0,
-                startP[1] + if (applyTop) bars.top else 0,
-                startP[2] + if (applyRight) bars.right else 0,
-                startP[3] + if (applyBottom) bars.bottom else 0
-            )
-            insets
+            intArrayOf(bars.left, bars.top, bars.right, bars.bottom)
         } else {
             @Suppress("DEPRECATION")
-            v.setPadding(
-                startP[0] + if (applyLeft) insets.systemWindowInsetLeft else 0,
-                startP[1] + if (applyTop) insets.systemWindowInsetTop else 0,
-                startP[2] + if (applyRight) insets.systemWindowInsetRight else 0,
-                startP[3] + if (applyBottom) insets.systemWindowInsetBottom else 0
+            intArrayOf(
+                insets.systemWindowInsetLeft,
+                insets.systemWindowInsetTop,
+                insets.systemWindowInsetRight,
+                insets.systemWindowInsetBottom
             )
-            @Suppress("DEPRECATION") insets
         }
+
+        val effectiveLeft = if (applyLeft) leftInset else 0
+        val effectiveTop = if (applyTop) topInset else 0
+        val effectiveRight = if (applyRight) rightInset else 0
+        val effectiveBottom = if (applyBottom) bottomInset else 0
+
+        v.setPadding(
+            startP[0] + effectiveLeft,
+            startP[1] + effectiveTop,
+            startP[2] + effectiveRight,
+            startP[3] + effectiveBottom
+        )
+
+        @Suppress("DEPRECATION")
+        insets
     }
     requestApplyInsets()
 }
-
