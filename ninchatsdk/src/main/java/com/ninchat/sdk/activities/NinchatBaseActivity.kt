@@ -74,7 +74,10 @@ abstract class NinchatBaseActivity : AppCompatActivity() {
                 findViewById<View>(layoutId)?.run { visibility = View.GONE }
             }
         }
-        findViewById<View>(layoutId)?.run { visibility = View.VISIBLE }
+        findViewById<View>(layoutId)?.run {
+            applySystemBarInsets(applyLeft = true, applyRight = true, applyBottom = false)
+            visibility = View.VISIBLE
+        }
     }
 
     override fun onBackPressed() {
