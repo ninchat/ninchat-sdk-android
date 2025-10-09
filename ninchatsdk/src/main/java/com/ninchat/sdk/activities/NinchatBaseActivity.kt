@@ -18,7 +18,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ninchat.sdk.R
-import com.ninchat.sdk.utils.display.getStatusBarHeight
+import com.ninchat.sdk.utils.display.applySystemBarInsets
 import com.ninchat.sdk.utils.misc.Broadcast
 
 abstract class NinchatBaseActivity : AppCompatActivity() {
@@ -48,6 +48,8 @@ abstract class NinchatBaseActivity : AppCompatActivity() {
         }
 
         setContentView(layoutRes)
+        (findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0))?.applySystemBarInsets()
+        
         LocalBroadcastManager.getInstance(applicationContext).run {
             registerReceiver(closeActivityReceiver, IntentFilter(Broadcast.CLOSE_NINCHAT_ACTIVITY))
         }
