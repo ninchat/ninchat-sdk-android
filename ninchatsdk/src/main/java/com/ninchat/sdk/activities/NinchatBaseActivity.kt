@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -17,7 +18,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ninchat.sdk.R
-import com.ninchat.sdk.utils.display.getStatusBarHeight
+import com.ninchat.sdk.utils.display.applySystemBarInsets
 import com.ninchat.sdk.utils.misc.Broadcast
 
 abstract class NinchatBaseActivity : AppCompatActivity() {
@@ -30,7 +31,30 @@ abstract class NinchatBaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= 30) {
+            window.setDecorFitsSystemWindows(false) // Android 11+
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        }
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            window.statusBarColor = Color.TRANSPARENT
+            window.navigationBarColor = Color.TRANSPARENT
+        }
+
         setContentView(layoutRes)
+        findViewById<ViewGroup>(android.R.id.content)
+            ?.let { it.getChildAt(0) ?: it }
+            ?.applySystemBarInsets(
+                applyLeft = true,
+                applyRight = true
+            )
+
         LocalBroadcastManager.getInstance(applicationContext).run {
             registerReceiver(closeActivityReceiver, IntentFilter(Broadcast.CLOSE_NINCHAT_ACTIVITY))
         }
@@ -52,7 +76,10 @@ abstract class NinchatBaseActivity : AppCompatActivity() {
                 findViewById<View>(layoutId)?.run { visibility = View.GONE }
             }
         }
-        findViewById<View>(layoutId)?.run { visibility = View.VISIBLE }
+        findViewById<View>(layoutId)?.run {
+            applySystemBarInsets(applyLeft = true, applyRight = true, applyBottom = false)
+            visibility = View.VISIBLE
+        }
     }
 
     override fun onBackPressed() {
