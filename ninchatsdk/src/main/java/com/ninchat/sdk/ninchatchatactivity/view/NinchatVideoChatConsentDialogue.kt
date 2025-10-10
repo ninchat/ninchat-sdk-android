@@ -2,11 +2,13 @@ package com.ninchat.sdk.ninchatchatactivity.view
 
 import android.app.AlertDialog
 import android.content.Context
+import android.view.View
 import com.ninchat.sdk.NinchatSessionManager
 import com.ninchat.sdk.R
 import com.ninchat.sdk.adapters.NinchatMessageAdapter
 import com.ninchat.sdk.helper.glidewrapper.GlideWrapper
 import com.ninchat.sdk.utils.misc.NinchatAdapterCallback
+import com.ninchat.sdk.utils.display.applySystemBarInsets
 import kotlinx.android.synthetic.main.dialog_video_call_consent.*
 
 class NinchatVideoChatConsentDialogue {
@@ -22,6 +24,11 @@ class NinchatVideoChatConsentDialogue {
                     .setCancelable(false)
                     .create()
             dialog.show()
+            dialog.findViewById<View>(R.id.ninchat_video_call_consent_dialog_root)?.applySystemBarInsets(
+                applyLeft = true,
+                applyRight = true,
+                applyBottom = true
+            )
             NinchatSessionManager.getInstance()?.let { sessionManager ->
                 dialog.ninchat_video_call_consent_dialog_title.text =
                     sessionManager.ninchatState.siteConfig.getVideoChatTitleText()

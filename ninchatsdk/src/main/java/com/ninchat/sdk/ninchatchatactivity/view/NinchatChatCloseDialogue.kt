@@ -2,8 +2,10 @@ package com.ninchat.sdk.ninchatchatactivity.view
 
 import android.app.AlertDialog
 import android.content.Context
+import android.view.View
 import com.ninchat.sdk.NinchatSessionManager
 import com.ninchat.sdk.R
+import com.ninchat.sdk.utils.display.applySystemBarInsets
 import kotlinx.android.synthetic.main.dialog_close_chat.*
 
 class NinchatChatCloseDialogue {
@@ -15,6 +17,11 @@ class NinchatChatCloseDialogue {
                 .setCancelable(true)
                 .create()
             dialog.show()
+            dialog.findViewById<View>(R.id.ninchat_close_chat_dialog_root)?.applySystemBarInsets(
+                applyLeft = true,
+                applyRight = true,
+                applyBottom = true
+            )
             NinchatSessionManager.getInstance()?.let { sessionManager ->
                 dialog.ninchat_close_chat_dialog_title.text =
                     sessionManager.ninchatState.siteConfig.getChatCloseText()
@@ -43,4 +50,3 @@ class NinchatChatCloseDialogue {
         }
     }
 }
-

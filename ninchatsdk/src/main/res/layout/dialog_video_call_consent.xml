@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
     <LinearLayout
+        android:id="@+id/ninchat_video_call_consent_dialog_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/ninchat_color_modal_background"
