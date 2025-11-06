@@ -14,7 +14,8 @@ ext {
     versionMajor = Integer.parseInt(sp[0])   // 0..n
     versionMinor = Integer.parseInt(sp[1])   // 0..9
     versionFix = Integer.parseInt(sp[2])   // 0..99
-    versionBuild = Integer.parseInt(s.size() < 2 ? "0" : s[1])
+    versionBuild = Integer.parseInt(s.size() < 2 ? "0" : s[1]) // un-comment if we do not want to override
+    // versionBuild = Integer.parseInt("0") // override current version
 }
 
 def calculateVersionName = {
@@ -61,7 +62,7 @@ android {
 
 
 dependencies {
-    implementation 'com.ninchat:client:1.4.1'
+    implementation 'com.ninchat:client:1.5.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
@@ -93,7 +94,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation 'com.airbnb.android:paris:1.7.3'
-    implementation 'com.ninchat:libwebrtc:106.0.3'
 }
 
 apply plugin: 'maven'

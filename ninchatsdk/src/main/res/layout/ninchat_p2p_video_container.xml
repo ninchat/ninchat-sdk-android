@@ -8,13 +8,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <org.webrtc.SurfaceViewRenderer
+    <VideoView
         android:id="@+id/video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true" />
 
-    <org.webrtc.SurfaceViewRenderer
+    <VideoView
         android:id="@+id/pip_video"
         android:layout_width="@dimen/ninchat_chat_activity_pip_video_width"
         android:layout_height="@dimen/ninchat_chat_activity_pip_video_height"
