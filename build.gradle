@@ -24,7 +24,7 @@ allprojects {
         google()
         jcenter()
         maven {
-            url "https://raw.github.com/somia/ninchat-sdk-android/master"
+            url "https://raw.github.com/somia/ninchat-sdk-android/go-client-support-16k-page-size"
         }
         maven {
             url "https://maven.google.com"
