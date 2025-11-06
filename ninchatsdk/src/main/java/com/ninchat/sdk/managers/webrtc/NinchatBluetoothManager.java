@@ -17,7 +17,6 @@ import android.os.Process;
 import androidx.annotation.Nullable;
 import android.util.Log;
 
-import org.webrtc.ThreadUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -188,7 +187,6 @@ public class NinchatBluetoothManager {
 
     protected NinchatBluetoothManager(Context context, NinchatAudioManager audioManager) {
         Log.d(TAG, "ctor");
-        ThreadUtils.checkIsOnMainThread();
         mContext = context;
         ninchatAudioManager = audioManager;
         this.audioManager = getAudioManager(context);
@@ -202,7 +200,6 @@ public class NinchatBluetoothManager {
      * Returns the internal state.
      */
     public State getState() {
-        ThreadUtils.checkIsOnMainThread();
         return bluetoothState;
     }
 
@@ -220,7 +217,6 @@ public class NinchatBluetoothManager {
      * change.
      */
     public void start() {
-        ThreadUtils.checkIsOnMainThread();
         Log.d(TAG, "start");
         if (!hasPermission(mContext, android.Manifest.permission.BLUETOOTH)) {
             Log.w(TAG, "Process (pid=" + Process.myPid() + ") lacks BLUETOOTH permission");
@@ -270,7 +266,6 @@ public class NinchatBluetoothManager {
      * Stops and closes all components related to Bluetooth audio.
      */
     public void stop() {
-        ThreadUtils.checkIsOnMainThread();
         Log.d(TAG, "stop: BT state=" + bluetoothState);
         if (bluetoothAdapter == null) {
             return;
@@ -307,7 +302,6 @@ public class NinchatBluetoothManager {
      * accept SCO audio without a "call".
      */
     public boolean startScoAudio() {
-        ThreadUtils.checkIsOnMainThread();
         Log.d(TAG, "startSco: BT state=" + bluetoothState + ", "
                 + "attempts: " + scoConnectionAttempts + ", "
                 + "SCO is on: " + isScoOn());
@@ -338,7 +332,6 @@ public class NinchatBluetoothManager {
      * Stops Bluetooth SCO connection with remote device.
      */
     public void stopScoAudio() {
-        ThreadUtils.checkIsOnMainThread();
         Log.d(TAG, "stopScoAudio: BT state=" + bluetoothState + ", "
                 + "SCO is on: " + isScoOn());
         if (bluetoothState != State.SCO_CONNECTING && bluetoothState != State.SCO_CONNECTED) {
@@ -434,7 +427,6 @@ public class NinchatBluetoothManager {
      * Ensures that the audio manager updates its list of available audio devices.
      */
     private void updateAudioDeviceState() {
-        ThreadUtils.checkIsOnMainThread();
         ninchatAudioManager.updateAudioDeviceState();
     }
 
@@ -442,7 +434,6 @@ public class NinchatBluetoothManager {
      * Starts timer which times out after BLUETOOTH_SCO_TIMEOUT_MS milliseconds.
      */
     private void startTimer() {
-        ThreadUtils.checkIsOnMainThread();
         Log.d(TAG, "startTimer");
         handler.postDelayed(bluetoothTimeoutRunnable, BLUETOOTH_SCO_TIMEOUT_MS);
     }
@@ -451,7 +442,6 @@ public class NinchatBluetoothManager {
      * Cancels any outstanding timer tasks.
      */
     private void cancelTimer() {
-        ThreadUtils.checkIsOnMainThread();
         Log.d(TAG, "cancelTimer");
         handler.removeCallbacks(bluetoothTimeoutRunnable);
     }
@@ -461,7 +451,6 @@ public class NinchatBluetoothManager {
      * happens when the BT device has been turned on during an ongoing call.
      */
     private void bluetoothTimeout() {
-        ThreadUtils.checkIsOnMainThread();
         if (bluetoothState == State.UNINITIALIZED || bluetoothHeadset == null) {
             return;
         }
