@@ -14,8 +14,8 @@ ext {
     versionMajor = Integer.parseInt(sp[0])   // 0..n
     versionMinor = Integer.parseInt(sp[1])   // 0..9
     versionFix = Integer.parseInt(sp[2])   // 0..99
-    // versionBuild = Integer.parseInt(s.size() < 2 ? "0" : s[1]) // un-comment if we do not want to override
-    versionBuild = Integer.parseInt("0") // override current version
+    versionBuild = Integer.parseInt(s.size() < 2 ? "0" : s[1]) // un-comment if we do not want to override
+    // versionBuild = Integer.parseInt("0") // override current version
 }
 
 def calculateVersionName = {
