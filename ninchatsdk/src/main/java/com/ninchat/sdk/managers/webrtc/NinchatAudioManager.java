@@ -11,7 +11,6 @@ import android.os.Build;
 import androidx.annotation.Nullable;
 import android.util.Log;
 
-import org.webrtc.ThreadUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -103,7 +102,6 @@ public class NinchatAudioManager {
 
     private NinchatAudioManager(Context context) {
         Log.d(TAG, "ctor");
-        ThreadUtils.checkIsOnMainThread();
         mContext = context;
         mAudioManager = ((AudioManager) context.getSystemService(Context.AUDIO_SERVICE));
         bluetoothManager = NinchatBluetoothManager.create(context, this);
@@ -115,7 +113,6 @@ public class NinchatAudioManager {
 
     @SuppressWarnings("deprecation")
     public void start(AudioManagerEvents audioManagerEvents) {
-        ThreadUtils.checkIsOnMainThread();
         if (audioManagerState == AudioManagerState.RUNNING) {
             Log.e(TAG, "AudioManager is already active");
             return;
@@ -168,7 +165,6 @@ public class NinchatAudioManager {
     // TODO(henrika): audioManager.abandonAudioFocus() is deprecated.
     public void stop() {
         Log.d(TAG, "stop");
-        ThreadUtils.checkIsOnMainThread();
         if (audioManagerState != AudioManagerState.RUNNING) {
             Log.e(TAG, "Trying to stop AudioManager in incorrect state: " + audioManagerState);
             return;
@@ -286,7 +282,6 @@ public class NinchatAudioManager {
      * TODO: add unit test to verify all state transitions.
      */
     public void updateAudioDeviceState() {
-        ThreadUtils.checkIsOnMainThread();
         Log.d(TAG, "--- updateAudioDeviceState: "
                 + "wired headset=" + hasWiredHeadset + ", "
                 + "BT state=" + bluetoothManager.getState());
