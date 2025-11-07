@@ -23,7 +23,6 @@ import com.ninchat.sdk.ninchatreview.presenter.NinchatReviewPresenter
 import com.ninchat.sdk.ninchattitlebar.model.shouldShowTitlebar
 import com.ninchat.sdk.ninchattitlebar.view.NinchatTitlebarView.Companion.showTitlebarForBacklog
 import com.ninchat.sdk.ninchatvideointegrations.jitsi.NinchatGroupCallIntegration
-import com.ninchat.sdk.ninchatvideointegrations.p2p.NinchatP2PIntegration
 import com.ninchat.sdk.utils.keyboard.hideKeyBoardForce
 import com.ninchat.sdk.utils.misc.Broadcast
 import com.ninchat.sdk.utils.misc.Misc.Companion.getNinchatChatBackground
@@ -41,7 +40,6 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
-    private var p2pIntegration: NinchatP2PIntegration? = null
     private var groupIntegration: NinchatGroupCallIntegration? = null
     private val model = NinchatChatModel().apply {
         parse()
@@ -52,8 +50,6 @@ class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
         onChannelClosed = {
             // common updates
             presenter.onChannelClosed(mActivity = this@NinchatChatActivity)
-            // p2p updates
-            p2pIntegration?.onChannelClosed()
             // group updates
             groupIntegration?.onChannelClosed()
         },
@@ -62,14 +58,6 @@ class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
             quit(it)
         },
         onP2PVideoCallInvitation = {
-            p2pIntegration?.maybeHandleP2PVideoCallInvitation(
-                intent = it,
-                activity = this@NinchatChatActivity
-            )
-            p2pIntegration?.mayBeHandleWebRTCMessages(
-                intent = it,
-                activity = this@NinchatChatActivity,
-            )
         },
         onJitsiDiscovered = {
             val jitsiRoom = it.extras?.getString(Broadcast.WEBRTC_MESSAGE_JITSI_ROOM) ?: ""
@@ -87,14 +75,12 @@ class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
     )
     private val softKeyboardViewHandler = SoftKeyboardViewHandler(
         onShow = {
-            p2pIntegration?.onSoftKeyboardVisibilityChanged(isVisible = true)
             groupIntegration?.onSoftKeyboardVisibilityChanged(
                 isVisible = true,
             )
             presenter.onSoftKeyboardVisibilityChanged(isVisible = true)
         },
         onHidden = {
-            p2pIntegration?.onSoftKeyboardVisibilityChanged(isVisible = false)
             groupIntegration?.onSoftKeyboardVisibilityChanged(
                 isVisible = false,
             )
@@ -110,10 +96,6 @@ class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
             return
         }
         presenter.handleOrientationChange(orientation, this@NinchatChatActivity)
-        p2pIntegration?.handleOrientationChange(
-            currentOrientation = orientation,
-            pendingHangup = false,
-        )
         groupIntegration?.handleOrientationChange(currentOrientation = orientation)
     }
 
@@ -151,9 +133,7 @@ class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
                 }
             } else {
                 if (hasVideoCallPermissions(mContext = applicationContext)) {
-                    p2pIntegration?.sendPickUpAnswer(true)
                 } else {
-                    p2pIntegration?.sendPickUpAnswer(false)
                     showError(
                         R.id.ninchat_chat_error,
                         R.string.ninchat_chat_error_no_video_call_permissions
@@ -188,9 +168,6 @@ class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
 
     fun onVideoHangUp(view: View?) {
         model.toggleFullScreen = false
-        // handle p2p hangup
-        p2pIntegration?.handleTitlebarView(true, this)
-        p2pIntegration?.hangUp()
         // handle group hangup
         groupIntegration?.hangUp()
 
@@ -203,10 +180,6 @@ class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
         val nextOrientation =
             if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT else ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         requestedOrientation = nextOrientation
-        p2pIntegration?.handleOrientationChange(
-            currentOrientation = nextOrientation,
-            pendingHangup = false,
-        )
     }
 
     fun chatClosed() {
@@ -224,22 +197,18 @@ class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
     }
 
     fun onToggleAudio(view: View?) {
-        p2pIntegration?.toggleAudio()
     }
 
     fun onToggleMicrophone(view: View?) {
-        p2pIntegration?.toggleMicrophone()
     }
 
     fun onToggleVideo(view: View?) {
-        p2pIntegration?.toggleVideo()
     }
 
     fun onVideoCall(view: View?) {
         if (model.chatClosed) {
             return
         }
-        p2pIntegration?.call()
     }
 
     fun onAttachmentClick(view: View?) {
@@ -377,11 +346,6 @@ class NinchatChatActivity : NinchatBaseActivity(), IOrientationManager {
                 chatClosed = model.chatClosed,
             )
         } else {
-            p2pIntegration =
-                NinchatP2PIntegration(
-                    videoContainer = conference_or_p2p_view_container.findViewById(R.id.ninchat_p2p_video_view),
-                    mActivity = this@NinchatChatActivity,
-                )
         }
     }
 
